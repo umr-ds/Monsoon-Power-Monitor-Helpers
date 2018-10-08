@@ -13,6 +13,7 @@ Furthermore, you can install the package system wide or not. I prefer using the 
 ```
 git clone https://github.com/msoon/PyMonsoon.git monsoon
 cd monsoon
+git checkout 0f14c064e4b378ba75fa94fe7bf6d4f8b078abdb
 touch __init__.py
 cd Monsoon
 touch __init__.py
