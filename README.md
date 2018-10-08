@@ -19,6 +19,44 @@ cd Monsoon
 touch __init__.py
 ```
 
+After that you have to change the import paths for two files:
+
+First:
+```diff
+diff --git a/monsoon/Monsoon/HVPM.py b/monsoon/Monsoon/HVPM.py
+index 1b6b217..b907123 100644
+--- a/monsoon/Monsoon/HVPM.py
++++ b/monsoon/Monsoon/HVPM.py
+@@ -4,11 +4,11 @@ import math
+ import usb.core
+ import usb.util
+ import struct
+-from Monsoon import Operations as op
++from monsoon.Monsoon import Operations as op
+
+ import numpy as np
+
+-from Monsoon import pmapi
++from monsoon.Monsoon import pmapi
+
+ class Monsoon(object):
+```
+
+Second:
+```
+diff --git a/monsoon/Monsoon/pmapi.py b/monsoon/Monsoon/pmapi.py
+index 394e851..4a28d9d 100644
+--- a/monsoon/Monsoon/pmapi.py
++++ b/monsoon/Monsoon/pmapi.py
+@@ -1,5 +1,5 @@
+ import struct
+-from Monsoon import Operations as op
++from monsoon.Monsoon import Operations as op
+ import ctypes
+ import platform
+ import usb.core
+```
+
 Additionally, you need the `gflags` module
 
 ```
