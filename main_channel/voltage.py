@@ -1,5 +1,5 @@
 import sys
-import monsoon.Monsoon.HVPM as HVPM
+import Monsoon.HVPM as HVPM
 import gflags as flags
 
 FLAGS = flags.FLAGS

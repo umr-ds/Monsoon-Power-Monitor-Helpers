@@ -1,11 +1,22 @@
 import sys
-import monsoon.Monsoon.HVPM as HVPM
-import monsoon.Monsoon.sampleEngine as sampleEngine
+import signal
+
+import Monsoon.HVPM as HVPM
+import Monsoon.sampleEngine as sampleEngine
+import Monsoon.Operations as op
+
 import gflags as flags
 
+
 FLAGS = flags.FLAGS
+engine = None
+
+def stopMeasurement():
+    engine.setStopTrigger(sampleEngine.triggers.GREATER_THAN, 0.1)
 
 def main():
+    global engine
+
     # Setup the Power Monitor.
     power_monitor_device = HVPM.Monsoon()
     power_monitor_device.setup_usb()
@@ -37,6 +48,17 @@ def main():
     if FLAGS.n:
         num_samples = FLAGS.n
 
+    engine.disableChannel(sampleEngine.channels.MainCurrent)
+    engine.disableChannel(sampleEngine.channels.MainVoltage)
+
+    if FLAGS.u:
+        power_monitor_device.setUSBPassthroughMode(op.USB_Passthrough.On)
+    else:
+        power_monitor_device.setUSBPassthroughMode(op.USB_Passthrough.Off)
+
+    engine.enableChannel(sampleEngine.channels.USBCurrent)
+    engine.enableChannel(sampleEngine.channels.USBVoltage)
+
     # Finally, start the measuremen.
     engine.startSampling(num_samples)
 
@@ -45,6 +67,7 @@ if __name__ == "__main__":
     flags.DEFINE_integer("t", None, "Timout in seconds for stopping sampling (default 30 seconds)")
     flags.DEFINE_integer("n", None, "Number of samples (default INFINITE)")
     flags.DEFINE_boolean("s", False, "Print to stdout (default False)")
+    flags.DEFINE_boolean("u", True, "Set USB Passthrough (default True)")
 
     FLAGS(sys.argv)
     main()
